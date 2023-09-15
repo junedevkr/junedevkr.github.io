@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>juneDev KR</title>
+</head>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<script src="https://threejs.org/build/three.js"></script>
+
+<style>
+    body { margin: 0; }
+    canvas { display: block; }
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align:center;
+    }
+    img {
+        border-radius: 50%;
+        width:200px;
+        height:auto;
+    }
+</style>
+</head>
+
+<body>
+<div id="bg"></div>
+
+<div class="container">
+<h2>내일의인간</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/9DvIPcgdZjk?si=F-fB4xfAnBsegBSl&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<a href="https://pixelartjn.netlify.app/" class="btn" target="_blank">픽셀아트만들기</a><br> 
+<a href="https://github.com/junedevkr/0902go" class="btn"target="_blank">0902 하나의 점찍기</a> <br>
+<a href="https://bit.ly/0916blackwave" class="btn"target="_blank">0916 우리는 검은 파도가 된다.</a> 
+</div>
+<script>
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
+    
+    var renderer = new THREE.WebGLRenderer({alpha:true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    
+    var geometry = new THREE.BoxGeometry(1,1,1);
+    var material = new THREE.MeshBasicMaterial({color:'#433F81'});
+    var cube = new THREE.Mesh(geometry, material);
+    
+    scene.add(cube);
+    
+    function animate() {
+        requestAnimationFrame(animate);
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+    
+        renderer.render(scene,camera);
+    }
+    
+    animate();
+    
+    window.addEventListener('resize', function() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth ,window.innerHeight);
+    });
+    
+    </script>
+    
+    <!-- Import Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+    
+</html>
