@@ -1,77 +1,145 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>juneDev KR</title>
+    <title>Document</title>
+
 </head>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-<script src="https://threejs.org/build/three.js"></script>
-
 <style>
-    body { margin: 0; }
-    canvas { display: block; }
-    .container {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align:center;
-    }
-    img {
-        border-radius: 50%;
-        width:200px;
-        height:auto;
-    }
+
+body {
+    word-break: keep-all;
+    word-spacing: -10%;
+    letter-spacing: -10%;
+    color: white;
+    font-weight: 900;
+}
+.contents {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  color: white;
+}
+
+
+
+/*YOUTUBE VIDEO*/
+.youtube {
+  position: relative;
+  height: 100vh;
+  background-color: #333;
+  overflow: hidden;
+}
+.youtube .youtube__area {
+  width: 1920px;
+  position: absolute;
+  /* 16비율 */
+  left: 50%;
+  margin-left: calc(1920px / -2);
+  /* 9비율 */
+  top: 50%;
+  margin-top: calc(1920px * 9 / 16 / -2);
+  z-index: 998;
+}
+
+.youtube .youtube__area::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-top: 56.25%;
+}
+.youtube .youtube__cover {
+    position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 9998;
+}
+#player {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.youtube .inner {
+  height: inherit;
+  z-index: 1;
+  display: block;
+  color: white; 
+}
+
+a {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit; /* 부모 요소의 색상 상속 */
+}
+
+
 </style>
-</head>
 
-<body>
-<div id="bg"></div>
-
-<div class="container">
-<h2>내일의인간</h2>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/9DvIPcgdZjk?si=F-fB4xfAnBsegBSl&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-<a href="https://pixelartjn.netlify.app/" class="btn" target="_blank">픽셀아트만들기</a><br> 
-<a href="https://github.com/junedevkr/0902go" class="btn"target="_blank">0902 하나의 점찍기</a> <br>
-<a href="https://bit.ly/0916blackwave" class="btn"target="_blank">0916 우리는 검은 파도가 된다.</a> 
-</div>
 <script>
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
-    
-    var renderer = new THREE.WebGLRenderer({alpha:true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-    
-    var geometry = new THREE.BoxGeometry(1,1,1);
-    var material = new THREE.MeshBasicMaterial({color:'#433F81'});
-    var cube = new THREE.Mesh(geometry, material);
-    
-    scene.add(cube);
-    
-    function animate() {
-        requestAnimationFrame(animate);
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-    
-        renderer.render(scene,camera);
+    // Youtube IFrame API를 비동기로 로드합니다.
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// onYouTubePlayerAPIReady 함수 이름은,
+// Youtube IFrame Player API에서 사용하는 이름이기 때문에,
+// 다르게 지정하면 동작하지 않습니다!
+// 그리고 함수는 전역(Global) 등록해야 합니다!
+function onYouTubePlayerAPIReady() {
+  // <div id="player"></div>
+  new YT.Player('player', {
+    videoId: 'CfPxlb8-ZQ0', // 최초 재생할 유튜브 영상 ID
+    playerVars: {
+      autoplay: true, // 자동 재생 유무
+      loop: true, // 반복 재생 유무
+      playlist: 'CfPxlb8-ZQ0' // 반복 재생할 유튜브 영상 ID 목록
+    },
+    events: {
+      // 영상이 준비되었을 때,
+      onReady: function (event) {
+        event.target.unMute();
+        // 볼륨을 최소로 설정 (0은 무음, 100은 최대)
+        event.target.setVolume(0);
     }
-    
-    animate();
-    
-    window.addEventListener('resize', function() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth ,window.innerHeight);
-    });
-    
-    </script>
-    
-    <!-- Import Materialize JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    
-    
+    }
+  })
+}
+</script>
+<body>
+
+    <!-- 컨텐츠내용 -->
+<div class="contents">
+    <h1>내일의인간 juneDevKr</h1>
+    <a href="https://pixelartjn.netlify.app/" target="_blank">🔗    픽셀아트만들기</a><br><br>
+    <a href="https://junedevkr.github.io/0902go" target="_blank">🔗09.02. 하나의 점 찍기</a><br><br>
+    <a href="https://bit.ly/0916blackwave" target="_blank">🔗09.16. 검은 파도가 됩니다.</a><br><br>
+    <a href="https://www.youtube.com/watch?v=9DvIPcgdZjk" target="_blank">🎵Me in the Dummy Box / DT</a><br><br>
+
+
+</div>
+
+
+
+
+  <!--YOUTUBE VIDEO-->
+  <section class="youtube">
+    <div class="youtube__area">
+      <div id="player"></div>
+    </div>
+    <div class="youtube__cover"></div>
+    <div class="inner">
+      </div>
+  </section>
+
+
+</body>
 </html>
